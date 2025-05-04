@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}feelinks.app{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Flowbite -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-xl font-bold text-blue-700">feelinks.app</a>
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="/dashboard/mis-enlaces/" class="text-sm text-gray-700 hover:underline">Dashboard</a>
+                {% else %}
+                    <a href="/login/" class="text-sm text-blue-600 hover:underline">Iniciar sesión</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido -->
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>
