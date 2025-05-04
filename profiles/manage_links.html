@@ -1,8 +1,48 @@
 {% extends base.html %}
 
+{% load widget_tweaks %}
 {% block content %}
-<div class="max-w-xl mx-auto mt-10">
-  <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Gestionar mis enlaces</h1>
+    <div class="max-w-xl mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Gestionar mis enlaces</h1>
 
+        <!--- Formulario para añadir un nuevo enlace -->
+        <form method="POST" class="space-y-4 mb-8">
+            {% csrf_token %}
+            <div class="grid gap-4">
+                <div>
+                    <label for="id_title" class="block mb-2 text-sm font-medium text-gray-900">Título</label>
+                    {{ form.title|add_class:"form-input w-full" }}
+                </div>
+                <div>
+                    <label for="id_url" class="block mb-2 text-sm font-medium text-gray-900">URL</label>
+                    {{ form.url|add_class:"form-input w-full" }}
+                </div>
+                <div>
+                    <label for="id_order" class="block mb-2 text-sm font-medium text-gray-900">Orden</label>
+                    {{ form.order|add_class:"form-input w-full" }}
+                </div>
+            </div>
+            <button type="submit"
+                    class="w-full mt-4 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                Agregar enlace
+            </button>
+        </form>
 
+        <!-- - Tabla de enlaces existentes -->
+        <ul class="space-y-4">
+            {% for link in links %}
+                <li class="p-4 border border-gray-200 rounded-lg bg-white shadow flex justify-between items-center">
+                    <div>
+                        <p class="font-semibold">{{ link.title }}</p>
+                        <a href="{{ link.url }}" class="text-blue-600 hover:underline">{{ link.url }}</a>
+                        <p class="text-sm text-gray-500">Orden: {{ link.order }}</p>
+                    </div>
+                    <a href="{% url 'delete_link' link.id %}" class="text-red-600 hover:underline">Eliminar</a>
+                </li>
+            {% empty %}
+                <li class="text-gray-500">No tienes enlaces aún.</li>
+            {% endfor %}
+        </ul>
+
+    </div>
 {% endblock %}
