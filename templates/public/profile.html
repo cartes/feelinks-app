@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ profile_user.username }} • feelinks.app{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto text-center bg-white p-6 rounded-lg shadow-md mt-10">
+
+    <!-- Avatar -->
+    {% if profile_user.profile.avatar_url %}
+      <img src="{{ profile_user.profile.avatar_url }}" alt="Avatar de {{ profile_user.username }}"
+           class="w-24 h-24 mx-auto rounded-full shadow mb-4">
+    {% else %}
+      <div class="w-24 h-24 mx-auto bg-gray-200 rounded-full flex items-center justify-center text-gray-500 mb-4">
+        <span class="text-xl">{{ profile_user.username|slice:":1"|upper }}</span>
+      </div>
+    {% endif %}
+
+    <!-- Nombre y Bio -->
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">
+        {{ profile_user.profile.display_name|default:profile_user.username }}
+    </h1>
+    {% if profile_user.profile.bio %}
+      <p class="text-sm text-gray-600 mb-6">{{ profile_user.profile.bio }}</p>
+    {% endif %}
+
+    <!-- Enlaces -->
+    <div class="space-y-3">
+      {% for link in links %}
+        <a href="{{ link.url }}" target="_blank"
+           class="block w-full px-4 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+          {{ link.title }}
+        </a>
+      {% empty %}
+        <p class="text-gray-400">Este usuario aún no ha agregado enlaces.</p>
+      {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

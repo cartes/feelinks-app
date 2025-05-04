@@ -28,3 +28,35 @@ def delete_link(request, link_id):
     link.delete()
     return redirect('manage_links')
 
+
+@login_required
+def edit_link(request, link_id):
+    link = get_object_or_404(UserLink, id=link_id, user=request.user)
+
+    if request.method == "POST":
+        form = UserLinkForm(request.POST, instance=link)
+        if form.is_valid():
+            form.save()
+            return redirect("manage_links")
+    else:
+        form = UserLinkForm(instance=link)
+
+    return render(request, "profiles/edit_link.html", {
+        "form": form,
+        "link": link
+    })
+
+@login_required
+def edit_profile(request):
+    profile = request.user.profile
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("manage_links")
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, "profiles/edit_profile.html", {"form": form})
+

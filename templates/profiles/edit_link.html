@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="max-w-xl mx-auto mt-10">
+  <h1 class="text-2xl font-bold mb-6 text-center">Editar enlace</h1>
+
+  <form method="POST" class="space-y-4">
+    {% csrf_token %}
+    <div>
+      <label for="id_title" class="block mb-2 text-sm font-medium text-gray-900">Título</label>
+      {{ form.title|add_class:"form-input w-full" }}
+    </div>
+    <div>
+      <label for="id_url" class="block mb-2 text-sm font-medium text-gray-900">URL</label>
+      {{ form.url|add_class:"form-input w-full" }}
+    </div>
+    <div>
+      <label for="id_order" class="block mb-2 text-sm font-medium text-gray-900">Orden</label>
+      {{ form.order|add_class:"form-input w-full" }}
+    </div>
+    <button type="submit" class="w-full bg-blue-700 text-white py-2.5 rounded hover:bg-blue-800">Guardar cambios</button>
+    <a href="{% url 'manage_links' %}" class="block text-center mt-4 text-sm text-gray-600 hover:underline">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
