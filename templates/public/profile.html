@@ -3,19 +3,24 @@
 {% block title %}{{ profile_user.username }} • feelinks.app{% endblock %}
 {% block content %}
     <div
-            class="min-h-screen flex flex-col items-center justify-start py-8 px-4
-            {% if profile_user.profile.theme == 'dark' %}
-                bg-gray-900 text-white
-            {% elif profile_user.profile.theme == 'neon' %}
-                bg-black text-green-400
-            {% elif profile_user.profile.theme == 'light' %}
-                bg-white text-gray-800
-            {% endif %}"
-
-            {% if profile_user.profile.theme == 'custom' %}
-            style="background-color: {{ profile_user.profile.background_color }}; color: {{ profile_user.profile.text_color }};"
-            {% endif %}
+        class="min-h-screen flex flex-col items-center justify-start py-8 px-4
+        {% if profile_user.profile.theme == 'dark' %}
+            bg-gray-900 text-white
+        {% elif profile_user.profile.theme == 'neon' %}
+            bg-black text-green-400
+        {% elif profile_user.profile.theme == 'light' %}
+            bg-white text-gray-800
+        {% endif %}"
+        {% if profile_user.profile.theme == 'custom' %}
+        style="background-color: {{ profile_user.profile.background_color }};
+                color: {{ profile_user.profile.text_color }};
+                font-family: {{ profile_user.profile.font_family }};
+                "
+        {% else %}
+        style="font-family: {{ profile_user.profile.font_family }};"
+        {% endif %}
     >
+
 
         <!-- Avatar -->
         {% if profile_user.profile.avatar_url %}
@@ -26,6 +31,8 @@
                 <span class="text-xl font-bold">{{ profile_user.username|slice:":1"|upper }}</span>
             </div>
         {% endif %}
+
+
 
         <!-- Nombre y Bio -->
         <h1 class="text-xl sm:text-2xl font-bold text-center">

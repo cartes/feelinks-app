@@ -1,52 +1,111 @@
-{% extends "base.html" %}
-{% load widget_tweaks %}
-
+{% extends "base_dashboard.html" %}
+{% block title %}Editar perfil | feelinks.app{% endblock %}
 {% block content %}
-    <div class="max-w-xl mx-auto mt-10">
-        <h1 class="text-2xl font-bold mb-6 text-center">Editar perfil</h1>
+    <h1 class="text-2xl font-bold mb-6">Editar perfil</h1>
 
-        <form method="POST" class="space-y-4">
-            {% csrf_token %}
+    <form method="POST" class="grid gap-6 max-w-2xl" id="profile-form">
+        {% csrf_token %}
+        <div>
+            <label class="block mb-1 text-sm font-medium">Nombre para mostrar</label>
+            {{ form.display_name }}
+        </div>
 
+        <div>
+            <label class="block mb-1 text-sm font-medium">Biografía</label>
+            {{ form.bio }}
+        </div>
+
+        <div>
+            <label class="block mb-1 text-sm font-medium">Avatar (URL)</label>
+            {{ form.avatar_url }}
+            <div class="mt-2">
+                <img id="avatarPreview" src="{{ request.user.profile.avatar_url }}"
+                     class="w-24 h-24 rounded-full border mt-2"/>
+            </div>
+        </div>
+
+        <div>
+            <label class="block mb-1 text-sm font-medium">Tema</label>
+            {{ form.theme }}
+        </div>
+
+        <div>
+            <label class="block mb-1 text-sm font-medium">Tipografía</label>
+            {{ form.font_family }}
+        </div>
+
+
+        <div id="customColors" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-                <label class="block mb-1 text-sm font-medium">Nombre para mostrar</label>
-                {{ form.display_name }}
+                <label class="block text-sm font-medium">Fondo</label>
+                {{ form.background_color }}
             </div>
-
             <div>
-                <label class="block mb-1 text-sm font-medium">Biografía</label>
-                {{ form.bio }}
+                <label class="block text-sm font-medium">Texto</label>
+                {{ form.text_color }}
             </div>
-
             <div>
-                <label class="block mb-1 text-sm font-medium">Avatar URL</label>
-                {{ form.avatar_url }}
+                <label class="block text-sm font-medium">Principal</label>
+                {{ form.primary_color }}
             </div>
+        </div>
 
-            <div>
-                <label class="block mb-1 text-sm font-medium">Tema</label>
-                {{ form.theme }}
-            </div>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Guardar</button>
+    </form>
 
-            <!-- 🔥 Solo mostrará si se selecciona "custom" -->
-            <div id="theme-custom-fields" class="space-y-4">
-                <div>
-                    <label class="block mb-1 text-sm font-medium">Color de fondo</label>
-                    {{ form.background_color }}
-                </div>
-
-                <div>
-                    <label class="block mb-1 text-sm font-medium">Color del texto</label>
-                    {{ form.text_color }}
-                </div>
-
-                <div>
-                    <label class="block mb-1 text-sm font-medium">Color principal (botones)</label>
-                    {{ form.primary_color }}
-                </div>
-            </div>
-
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Guardar</button>
-        </form>
+    <!-- Vista previa -->
+    <div class="mt-10 border-t pt-6">
+        <h2 class="text-lg font-semibold mb-2">Vista previa</h2>
+        <div id="previewBox" class="rounded-lg p-6 text-center shadow font-sans"
+             style="background-color: {{ request.user.profile.background_color }};
+                     color: {{ request.user.profile.text_color }};">
+            <img id="previewAvatar" src="{{ request.user.profile.avatar_url }}"
+                 class="w-20 h-20 mx-auto rounded-full mb-3 border"/>
+            <h3 class="text-xl font-bold">{{ request.user.profile.display_name|default:request.user.username }}</h3>
+            <p class="text-sm mt-2">{{ request.user.profile.bio }}</p>
+            <a href="#" class="inline-block mt-4 px-4 py-2 rounded text-white"
+               id="previewButton"
+               style="background-color: {{ request.user.profile.primary_color }};">Enlace de ejemplo</a>
+        </div>
     </div>
+
+    <script>
+        const avatarInput = document.getElementById("id_avatar_url");
+        const avatarPreview = document.getElementById("avatarPreview");
+        const previewAvatar = document.getElementById("previewAvatar");
+        const backgroundInput = document.getElementById("id_background_color");
+        const textInput = document.getElementById("id_text_color");
+        const primaryInput = document.getElementById("id_primary_color");
+        const previewBox = document.getElementById("previewBox");
+        const previewButton = document.getElementById("previewButton");
+
+        avatarInput.addEventListener("input", () => {
+            avatarPreview.src = avatarInput.value;
+            previewAvatar.src = avatarInput.value;
+        });
+
+        function updatePreview() {
+            previewBox.style.backgroundColor = backgroundInput.value;
+            previewBox.style.color = textInput.value;
+            previewButton.style.backgroundColor = primaryInput.value;
+        }
+
+        backgroundInput.addEventListener("input", updatePreview);
+        textInput.addEventListener("input", updatePreview);
+        primaryInput.addEventListener("input", updatePreview);
+
+        const fontSelect = document.getElementById("id_font_family");
+
+        function updateFontPreview() {
+            const currentClass = previewBox.classList.value.split(" ").find(cls => cls.startsWith("font-"));
+            if (currentClass) previewBox.classList.remove(currentClass);
+            previewBox.classList.add("font-" + fontSelect.value);
+        }
+
+        fontSelect.addEventListener("change", updateFontPreview);
+        updateFontPreview();  // inicial
+
+
+        updatePreview();  // inicial
+    </script>
 {% endblock %}

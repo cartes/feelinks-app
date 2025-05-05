@@ -1,36 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}Dashboard | feelinks.app{% endblock %}</title>
-  <link href="https://cdn.jsdelivr.net/npm/flowbite@2.3.0/dist/flowbite.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/flowbite@2.3.0/dist/flowbite.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Dashboard | feelinks.app{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Raleway&display=swap"
+          rel="stylesheet">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.3.0/dist/flowbite.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.3.0/dist/flowbite.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .font-sans {
+            font-family: system-ui, sans-serif;
+        }
+
+        .font-serif {
+            font-family: Georgia, serif;
+        }
+
+        .font-mono {
+            font-family: Menlo, monospace;
+        }
+
+        .font-inter {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .font-raleway {
+            font-family: 'Raleway', sans-serif;
+        }
+    </style>
+
 </head>
 <body class="bg-gray-50 text-gray-800">
 
 <div class="flex h-screen">
-  <!-- Sidebar -->
-  <aside class="w-64 bg-white border-r shadow-sm flex flex-col justify-between">
-    <div class="p-6">
-      <h1 class="text-2xl font-bold mb-8">feelinks.app</h1>
-      <nav class="space-y-2 text-sm">
-        <a href="{% url 'dashboard_home' %}" class="block py-2 px-3 rounded hover:bg-gray-100">🏠 Dashboard</a>
-        <a href="{% url 'edit_profile' %}" class="block py-2 px-3 rounded hover:bg-gray-100">🖊️ Editar perfil</a>
-        <a href="{% url 'manage_links' %}" class="block py-2 px-3 rounded hover:bg-gray-100">🔗 Mis enlaces</a>
-        <a href="/@{{ request.user.username }}" target="_blank" class="block py-2 px-3 rounded hover:bg-gray-100">🌐 Ver perfil</a>
-      </nav>
-    </div>
-    <div class="p-6">
-      <a href="/logout/" class="text-sm text-red-500 hover:underline">🚪 Cerrar sesión</a>
-    </div>
-  </aside>
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r shadow-sm flex flex-col justify-between">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold mb-8">feelinks.app</h1>
+            <nav class="space-y-2 text-sm">
+                <a href="{% url 'dashboard_home' %}" class="block py-2 px-3 rounded hover:bg-gray-100">🏠 Dashboard</a>
+                <a href="{% url 'edit_profile' %}" class="block py-2 px-3 rounded hover:bg-gray-100">🖊️ Editar
+                    perfil</a>
+                <a href="{% url 'manage_links' %}" class="block py-2 px-3 rounded hover:bg-gray-100">🔗 Mis enlaces</a>
+                <a href="/@{{ request.user.username }}" target="_blank"
+                   class="block py-2 px-3 rounded hover:bg-gray-100">🌐 Ver perfil</a>
+            </nav>
+        </div>
+        <div class="p-6">
+            <a href="/logout/" class="text-sm text-red-500 hover:underline">🚪 Cerrar sesión</a>
+        </div>
+    </aside>
 
-  <!-- Main content -->
-  <main class="flex-1 overflow-y-auto p-6">
-    {% block content %}{% endblock %}
-  </main>
+    <!-- Main content -->
+    <main class="flex-1 overflow-y-auto p-6">
+        {% block content %}{% endblock %}
+    </main>
 </div>
 
 </body>
