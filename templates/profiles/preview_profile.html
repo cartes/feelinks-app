@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10">
+  <h1 class="text-2xl font-bold mb-4 text-center">Vista previa de tu perfil público</h1>
+
+  <div class="aspect-w-9 aspect-h-16 w-full shadow-lg border rounded overflow-hidden">
+    <iframe
+      src="{{ public_url }}"
+      class="w-full h-[80vh] border-0"
+      title="Vista previa del perfil"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{{ public_url }}" target="_blank" class="text-blue-600 underline">Ver en nueva pestaña</a>
+  </div>
+</div>
+{% endblock %}

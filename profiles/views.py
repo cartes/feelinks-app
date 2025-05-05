@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import UserLink
-from .forms import UserLinkForm
+from .forms import UserLinkForm, ProfileForm
 
 @login_required
 def manage_links(request):
@@ -60,3 +60,8 @@ def edit_profile(request):
 
     return render(request, "profiles/edit_profile.html", {"form": form})
 
+@login_required
+def preview_profile(request):
+    username = request.user.username
+    public_url = f"/@{username}"
+    return render(request, "profiles/preview_profile.html", {"public_url": public_url})

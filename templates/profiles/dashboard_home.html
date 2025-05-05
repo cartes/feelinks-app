@@ -1,0 +1,40 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Mi Panel | feelinks.app{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">Hola, {{ request.user.profile.display_name|default:request.user.username }} 👋</h1>
+
+<div class="grid sm:grid-cols-3 gap-6 mb-8">
+  <a href="{% url 'edit_profile' %}" class="bg-white border rounded-lg p-4 hover:shadow">
+    ✏️ <span class="block mt-2 font-semibold text-lg">Editar perfil</span>
+    <p class="text-sm text-gray-500">Cambiar nombre, bio, avatar y tema visual.</p>
+  </a>
+
+  <a href="{% url 'manage_links' %}" class="bg-white border rounded-lg p-4 hover:shadow">
+    🔗 <span class="block mt-2 font-semibold text-lg">Mis enlaces</span>
+    <p class="text-sm text-gray-500">Gestiona tus enlaces de contacto o redes.</p>
+  </a>
+
+  <a href="/@{{ request.user.username }}" target="_blank" class="bg-white border rounded-lg p-4 hover:shadow">
+    🌐 <span class="block mt-2 font-semibold text-lg">Ver perfil público</span>
+    <p class="text-sm text-gray-500">Abre tu página tal como la ven los demás.</p>
+  </a>
+</div>
+
+<!-- Vista previa de colores -->
+<h2 class="text-lg font-semibold mb-2">🎨 Vista previa de tus colores</h2>
+<div class="grid sm:grid-cols-3 gap-4 max-w-lg">
+  <div class="rounded p-4 border" style="background-color: {{ request.user.profile.background_color }}">
+    <p class="text-sm font-medium">Fondo</p>
+    <div class="text-xs mt-1">{{ request.user.profile.background_color }}</div>
+  </div>
+  <div class="rounded p-4 border" style="background-color: {{ request.user.profile.text_color }}">
+    <p class="text-sm font-medium text-white">Texto</p>
+    <div class="text-xs text-white mt-1">{{ request.user.profile.text_color }}</div>
+  </div>
+  <div class="rounded p-4 border" style="background-color: {{ request.user.profile.primary_color }}">
+    <p class="text-sm font-medium text-white">Botón principal</p>
+    <div class="text-xs text-white mt-1">{{ request.user.profile.primary_color }}</div>
+  </div>
+</div>
+{% endblock %}

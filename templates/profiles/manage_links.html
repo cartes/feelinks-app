@@ -4,7 +4,12 @@
 {% block content %}
     <div class="max-w-xl mx-auto mt-10">
         <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Gestionar mis enlaces</h1>
-
+        <div class="mb-6 text-centerx ">
+            <a href="{% url 'preview_profile' %}"
+               class="bg-gray-100 hover:bg-gray-200 text-sm px-4 py-2 rounded shadow">
+                👀 Vista previa de mi perfil
+            </a>
+        </div>
         <!--- Formulario para añadir un nuevo enlace -->
         <form method="POST" class="space-y-4 mb-8">
             {% csrf_token %}
@@ -46,6 +51,6 @@
                 <li class="text-gray-500">No tienes enlaces aún.</li>
             {% endfor %}
         </ul>
-
     </div>
+
 {% endblock %}
