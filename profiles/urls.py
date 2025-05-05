@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.manage_links, name="dashboard_home"),
+    path("", views.dashboard_home, name="dashboard_home"),
     path('manage_links/', views.manage_links, name='manage_links'),
     path('delete_link/<int:link_id>/', views.delete_link, name='delete_link'),
     path("editar-enlace/<int:link_id>/", views.edit_link, name="edit_link"),

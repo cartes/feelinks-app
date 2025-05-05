@@ -28,7 +28,7 @@ class ProfileForm(forms.ModelForm):
             "bio": forms.Textarea(attrs={"class": "form-input w-full", "rows": 3}),
             "avatar_url": forms.URLInput(attrs={"class": "form-input w-full"}),
             "theme": forms.Select(attrs={"class": "form-select w-full"}),
-            "font_family": forms.Select(attrs={"id": "id_font_family", "class": "form-select"}),
+            "font_family": forms.Select(attrs={"id": "id_font_family", "class": "form-select w-full"}),
             "primary_color": forms.TextInput(attrs={"type": "color", "class": "form-input w-full"}),
             "text_color": forms.TextInput(attrs={"type": "color", "class": "form-input w-full"}),
             "background_color": forms.TextInput(attrs={"type": "color", "class": "form-input w-full"}),

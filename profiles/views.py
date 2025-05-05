@@ -65,3 +65,7 @@ def preview_profile(request):
     username = request.user.username
     public_url = f"/@{username}"
     return render(request, "profiles/preview_profile.html", {"public_url": public_url})
+
+@login_required
+def dashboard_home(request):
+    return render(request, "profiles/dashboard_home.html")

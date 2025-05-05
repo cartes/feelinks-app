@@ -93,19 +93,20 @@
         backgroundInput.addEventListener("input", updatePreview);
         textInput.addEventListener("input", updatePreview);
         primaryInput.addEventListener("input", updatePreview);
-
+        updatePreview();  // inicial
+    </script>
+    <script>
+        const previewBox = document.getElementById("previewBox");
         const fontSelect = document.getElementById("id_font_family");
 
         function updateFontPreview() {
-            const currentClass = previewBox.classList.value.split(" ").find(cls => cls.startsWith("font-"));
-            if (currentClass) previewBox.classList.remove(currentClass);
+            const currentFont = Array.from(previewBox.classList).find(c => c.startsWith("font-"));
+            if (currentFont) previewBox.classList.remove(currentFont);
             previewBox.classList.add("font-" + fontSelect.value);
         }
 
         fontSelect.addEventListener("change", updateFontPreview);
-        updateFontPreview();  // inicial
-
-
-        updatePreview();  // inicial
+        updateFontPreview();  // Ejecuta al cargar
     </script>
+
 {% endblock %}
