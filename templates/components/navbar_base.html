@@ -1,0 +1,36 @@
+<!-- NAVBAR FLOTANTE -->
+<header class="fixed top-4 left-1/2 transform -translate-x-1/2 w-[95%] max-w-6xl z-50 bg-white border rounded-2xl shadow-lg px-6 py-3 flex justify-between items-center backdrop-blur-md">
+    <a href="/" class="text-xl font-semibold text-blue-600">feelinks.app</a>
+
+    {% if request.user.is_authenticated %}
+        <!-- Dropdown de usuario -->
+        <div class="relative inline-block text-left">
+            <button id="userMenuButton" type="button" class="flex items-center space-x-2 focus:outline-none" data-dropdown-toggle="userDropdown">
+                {% if request.user.profile.avatar %}
+                    <img src="{{ request.user.profile.avatar.url }}" class="w-8 h-8 rounded-full border">
+                {% else %}
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold uppercase">
+                        {{ request.user.username|slice:":1" }}
+                    </div>
+                {% endif %}
+                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <!-- Dropdown menu -->
+            <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                <a href="{% url 'dashboard_home' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                <a href="{% url 'edit_profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Editar perfil</a>
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Cerrar sesión</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <nav class="space-x-4 text-sm">
+            <a href="{% url 'login' %}" class="text-gray-700 hover:text-blue-600">Iniciar sesión</a>
+            <a href="{% url 'signup' %}" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">Regístrate</a>
+        </nav>
+    {% endif %}
+</header>

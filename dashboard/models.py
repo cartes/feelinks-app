@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from themes.models import Theme
+from django.core.validators import FileExtensionValidator
+
 
 class Profile(models.Model):
     FONT_CHOICES = [
@@ -16,7 +18,12 @@ class Profile(models.Model):
     display_name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, help_text="URL única para el dashboard, ej: 'mi-dashboard'")
     bio = models.TextField(blank=True, null=True)
-    avatar_url = models.URLField(blank=True)
+    avatar = models.ImageField(
+        upload_to="avatars/",
+        validators=[FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"])],
+        blank=True,
+        null=True
+    )
     theme = models.CharField(max_length=20, choices=[
         ("light", "Claro"),
         ("dark", "Oscuro"),

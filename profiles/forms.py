@@ -18,7 +18,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
-            "display_name", "bio", "avatar_url", "theme",
+            "display_name", "bio", "avatar", "theme",
             "background_color", "text_color", "primary_color",
             "font_family"
         ]
@@ -26,7 +26,7 @@ class ProfileForm(forms.ModelForm):
         widgets = {
             "display_name": forms.TextInput(attrs={"class": "form-input w-full"}),
             "bio": forms.Textarea(attrs={"class": "form-input w-full", "rows": 3}),
-            "avatar_url": forms.URLInput(attrs={"class": "form-input w-full"}),
+            "avatar": forms.ClearableFileInput(attrs={"class": "form-input w-full"}),
             "theme": forms.Select(attrs={"class": "form-select w-full"}),
             "font_family": forms.Select(attrs={"id": "id_font_family", "class": "form-select w-full"}),
             "primary_color": forms.TextInput(attrs={"type": "color", "class": "form-input w-full"}),

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Crear cuenta | feelinks.app{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto py-12">
+    <h1 class="text-2xl font-bold mb-6 text-center">Crea tu cuenta</h1>
+    <form method="POST" class="space-y-6">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div>
+            <label class="block text-sm font-medium">Usuario</label>
+            {{ form.username }}
+        </div>
+        <div>
+            <label class="block text-sm font-medium">Correo electrónico</label>
+            {{ form.email }}
+        </div>
+        <div>
+            <label class="block text-sm font-medium">Contraseña</label>
+            {{ form.password1 }}
+        </div>
+        <div>
+            <label class="block text-sm font-medium">Repetir contraseña</label>
+            {{ form.password2 }}
+        </div>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Crear cuenta</button>
+    </form>
+</div>
+{% endblock %}

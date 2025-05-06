@@ -26,42 +26,8 @@
 </head>
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 
-<!-- Navbar -->
-<nav class="bg-white shadow">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <a href="/" class="text-2xl font-bold text-blue-700">feelinks.app</a>
-        <div class="space-x-4">
-            {% if request.user.is_authenticated %}
-                <div class="relative group inline-block">
-                    <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar">
-                        {% if request.user.profile.avatar_url %}
-                            <img src="{{ request.user.profile.avatar_url }}" alt="Avatar"
-                                 class="w-8 h-8 rounded-full border border-gray-300 shadow-sm"/>
-                        {% else %}
-                            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold text-gray-700">
-                                {{ request.user.username|slice:":1"|upper }}
-                            </div>
-                        {% endif %}
-                    </button>
-
-                    <!-- Dropdown -->
-                    <div id="dropdownAvatar"
-                         class="hidden z-50 absolute right-0 z-50 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg hidden group-hover:block">
-                        <a href="/dashboard/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">📋
-                            Dashboard</a>
-                        <a href="/@{{ request.user.username }}" target="_blank"
-                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">🌐 Ver perfil público</a>
-                        <a href="/logout/" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">🚪 Cerrar
-                            sesión</a>
-                    </div>
-                </div>
-            {% else %}
-                <a href="/login/" class="text-sm text-blue-600 hover:underline">Iniciar sesión</a>
-            {% endif %}
-
-        </div>
-    </div>
-</nav>
+<!-- NAVBAR FLOTANTE -->
+{% include "components/navbar_base.html" %}
 
 <!-- Contenido -->
 <main class="flex-1 container mx-auto px-4 py-8">

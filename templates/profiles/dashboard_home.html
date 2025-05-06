@@ -2,39 +2,70 @@
 {% block title %}Mi Panel | feelinks.app{% endblock %}
 
 {% block content %}
-<h1 class="text-2xl font-bold mb-6">Hola, {{ request.user.profile.display_name|default:request.user.username }} 👋</h1>
+    <h1 class="text-2xl font-bold mb-6">Hola, {{ request.user.profile.display_name|default:request.user.username }}
+        👋</h1>
 
-<div class="grid sm:grid-cols-3 gap-6 mb-8">
-  <a href="{% url 'edit_profile' %}" class="bg-white border rounded-lg p-4 hover:shadow">
-    ✏️ <span class="block mt-2 font-semibold text-lg">Editar perfil</span>
-    <p class="text-sm text-gray-500">Cambiar nombre, bio, avatar y tema visual.</p>
-  </a>
+    <div class="grid sm:grid-cols-3 gap-6 mb-8">
+        <!-- Editar perfil -->
+        <a href="{% url 'edit_profile' %}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+            <div class="flex items-center space-x-4">
+                <div class="p-3 bg-blue-100 text-blue-600 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M11 5h2m7.121 2.121a3 3 0 010 4.242L9 22H3v-6l11.121-11.121a3 3 0 014.242 0z"/>
+                    </svg>
+                </div>
+                <span class="text-xl font-medium text-gray-700">Editar perfil</span>
+            </div>
+        </a>
 
-  <a href="{% url 'manage_links' %}" class="bg-white border rounded-lg p-4 hover:shadow">
-    🔗 <span class="block mt-2 font-semibold text-lg">Mis enlaces</span>
-    <p class="text-sm text-gray-500">Gestiona tus enlaces de contacto o redes.</p>
-  </a>
+        <!-- Mis enlaces -->
+        <a href="{% url 'manage_links' %}" class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+            <div class="flex items-center space-x-4">
+                <div class="p-3 bg-green-100 text-green-600 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M13.828 14.828a4 4 0 010-5.656l1.415-1.414a4 4 0 115.657 5.656l-1.414 1.415a4 4 0 01-5.657 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M10.172 9.172a4 4 0 010 5.656L8.757 16.243a4 4 0 11-5.657-5.656l1.414-1.415a4 4 0 015.657 0z"/>
+                    </svg>
+                </div>
+                <span class="text-xl font-medium text-gray-700">Mis enlaces</span>
+            </div>
+        </a>
 
-  <a href="/@{{ request.user.username }}" target="_blank" class="bg-white border rounded-lg p-4 hover:shadow">
-    🌐 <span class="block mt-2 font-semibold text-lg">Ver perfil público</span>
-    <p class="text-sm text-gray-500">Abre tu página tal como la ven los demás.</p>
-  </a>
-</div>
+        <!-- Ver perfil público -->
+        <a href="/@{{ request.user.username }}" target="_blank"
+           class="block p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+            <div class="flex items-center space-x-4">
+                <div class="p-3 bg-purple-100 text-purple-600 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"/>
+                    </svg>
+                </div>
+                <span class="text-xl font-medium text-gray-700">Ver perfil público</span>
+            </div>
+        </a>
+    </div>
 
-<!-- Vista previa de colores -->
-<h2 class="text-lg font-semibold mb-2">🎨 Vista previa de tus colores</h2>
-<div class="grid sm:grid-cols-3 gap-4 max-w-lg">
-  <div class="rounded p-4 border" style="background-color: {{ request.user.profile.background_color }}">
-    <p class="text-sm font-medium">Fondo</p>
-    <div class="text-xs mt-1">{{ request.user.profile.background_color }}</div>
-  </div>
-  <div class="rounded p-4 border" style="background-color: {{ request.user.profile.text_color }}">
-    <p class="text-sm font-medium text-white">Texto</p>
-    <div class="text-xs text-white mt-1">{{ request.user.profile.text_color }}</div>
-  </div>
-  <div class="rounded p-4 border" style="background-color: {{ request.user.profile.primary_color }}">
-    <p class="text-sm font-medium text-white">Botón principal</p>
-    <div class="text-xs text-white mt-1">{{ request.user.profile.primary_color }}</div>
-  </div>
-</div>
+    <!-- Vista previa de colores -->
+    <h2 class="text-lg font-semibold mb-2">🎨 Vista previa de tus colores</h2>
+    <div class="grid sm:grid-cols-3 gap-4 max-w-lg">
+        <div class="rounded p-4 border" style="background-color: {{ request.user.profile.background_color }}">
+            <p class="text-sm font-medium">Fondo</p>
+            <div class="text-xs mt-1">{{ request.user.profile.background_color }}</div>
+        </div>
+        <div class="rounded p-4 border" style="background-color: {{ request.user.profile.text_color }}">
+            <p class="text-sm font-medium text-white">Texto</p>
+            <div class="text-xs text-white mt-1">{{ request.user.profile.text_color }}</div>
+        </div>
+        <div class="rounded p-4 border" style="background-color: {{ request.user.profile.primary_color }}">
+            <p class="text-sm font-medium text-white">Botón principal</p>
+            <div class="text-xs text-white mt-1">{{ request.user.profile.primary_color }}</div>
+        </div>
+    </div>
 {% endblock %}

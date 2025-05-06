@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import UserLink
 from .forms import UserLinkForm, ProfileForm
 
+
 @login_required
 def manage_links(request):
     links = UserLink.objects.filter(user=request.user)
@@ -21,6 +22,7 @@ def manage_links(request):
         'form': form,
         'links': links,
     })
+
 
 @login_required
 def delete_link(request, link_id):
@@ -46,25 +48,30 @@ def edit_link(request, link_id):
         "link": link
     })
 
+
 @login_required
 def edit_profile(request):
     profile = request.user.profile
 
     if request.method == "POST":
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             return redirect("manage_links")
     else:
         form = ProfileForm(instance=profile)
 
-    return render(request, "profiles/edit_profile.html", {"form": form})
+    return render(request, "profiles/edit_profile.html", {
+        "form": form,
+        "profile": profile,  # ✅ para mostrar avatar o datos en la vista
+    })
 
 @login_required
 def preview_profile(request):
     username = request.user.username
     public_url = f"/@{username}"
     return render(request, "profiles/preview_profile.html", {"public_url": public_url})
+
 
 @login_required
 def dashboard_home(request):

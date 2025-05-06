@@ -3,7 +3,7 @@
 {% block content %}
     <h1 class="text-2xl font-bold mb-6">Editar perfil</h1>
 
-    <form method="POST" class="grid gap-6 max-w-2xl" id="profile-form">
+    <form method="POST" class="grid gap-6 max-w-2xl" id="profile-form" enctype="multipart/form-data">
         {% csrf_token %}
         <div>
             <label class="block mb-1 text-sm font-medium">Nombre para mostrar</label>
@@ -17,11 +17,12 @@
 
         <div>
             <label class="block mb-1 text-sm font-medium">Avatar (URL)</label>
-            {{ form.avatar_url }}
-            <div class="mt-2">
-                <img id="avatarPreview" src="{{ request.user.profile.avatar_url }}"
-                     class="w-24 h-24 rounded-full border mt-2"/>
-            </div>
+            {{ form.avatar }}
+            {% if profile.avatar %}
+                <div class="mt-2">
+                    <img src="{{ profile.avatar.url }}" class="w-24 h-24 rounded-full border mt-2" />
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -70,7 +71,6 @@
     </div>
 
     <script>
-        const avatarInput = document.getElementById("id_avatar_url");
         const avatarPreview = document.getElementById("avatarPreview");
         const previewAvatar = document.getElementById("previewAvatar");
         const backgroundInput = document.getElementById("id_background_color");
@@ -78,11 +78,6 @@
         const primaryInput = document.getElementById("id_primary_color");
         const previewBox = document.getElementById("previewBox");
         const previewButton = document.getElementById("previewButton");
-
-        avatarInput.addEventListener("input", () => {
-            avatarPreview.src = avatarInput.value;
-            previewAvatar.src = avatarInput.value;
-        });
 
         function updatePreview() {
             previewBox.style.backgroundColor = backgroundInput.value;
