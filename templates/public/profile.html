@@ -1,21 +1,20 @@
-{% extends "base.html" %}
+{% extends "base_public.html" %}
 
 {% block title %}{{ profile_user.username }} • feelinks.app{% endblock %}
 {% block content %}
     <div
             class="min-h-screen flex flex-col items-center justify-start py-8 px-4
         {% if profile_user.profile.theme == 'dark' %}
-            bg-gray-900 text-white
+            bg-gray-900 text-white"
         {% elif profile_user.profile.theme == 'neon' %}
-            bg-black text-green-400
+            bg-black text-green-400"
         {% elif profile_user.profile.theme == 'light' %}
-            bg-white text-gray-800
-        {% endif %}"
+            bg-white text-gray-800"
+        {% endif %}
             {% if profile_user.profile.theme == 'custom' %}
             style="background-color: {{ profile_user.profile.background_color }};
                     color: {{ profile_user.profile.text_color }};
-                    font-family: {{ profile_user.profile.font_family }};
-                    "
+                    font-family: {{ profile_user.profile.font_family }};"
             {% else %}
             style="font-family: {{ profile_user.profile.font_family }};"
             {% endif %}

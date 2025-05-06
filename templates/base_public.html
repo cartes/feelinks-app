@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% include "components/public_head.html" %}
+    {% if enable_animations %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    {% endif %}
+</head>
+<body class="bg-white text-gray-900">
+    <main class="min-h-screen">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if enable_animations %}
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.from(".animatable", {
+                duration: 1,
+                opacity: 0,
+                y: 20,
+                stagger: 0.2
+            });
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

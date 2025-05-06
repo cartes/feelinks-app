@@ -127,3 +127,4 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'  # permite iframes desde el mismo dominio
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+LOGIN_URL = '/login/'
