@@ -6,12 +6,50 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     {% endif %}
 </head>
-<body class="bg-white text-gray-900">
-    <main class="min-h-screen">
-        {% block content %}{% endblock %}
-    </main>
+<body {% if profile_user.profile.theme == 'custom' %}
+        style="background-color: {{ profile_user.profile.background_color }};
+                color: {{ profile_user.profile.text_color }};
+                font-family: {{ profile_user.profile.font_family }};"
+        {% else %}
+        class="{% if profile_user.profile.theme == 'dark' %}bg-gray-900 text-white
+               {% elif profile_user.profile.theme == 'neon' %}bg-black text-green-400
+               {% elif profile_user.profile.theme == 'light' %}bg-white text-gray-800
+               {% endif %}"
+        style="font-family: {{ profile_user.profile.font_family }};"
+        {% endif %}
+        >
+<main class="min-h-screen">
+    {% block content %}{% endblock %}
+</main>
+<footer
+        {% if profile_user.profile.theme == 'custom' %}
+        style="background-color: {{ profile_user.profile.background_color }};
+                color: {{ profile_user.profile.text_color }};
+                font-family: {{ profile_user.profile.font_family }};"
+        {% else %}
+        class="{% if profile_user.profile.theme == 'dark' %}bg-gray-900 text-white
+               {% elif profile_user.profile.theme == 'neon' %}bg-black text-green-400
+               {% elif profile_user.profile.theme == 'light' %}bg-white text-gray-800
+               {% endif %} sticky py-6 px-4 text-center z-10 bottom-0"
+        style="font-family: {{ profile_user.profile.font_family }};"
+        {% endif %}
+>
 
-    {% if enable_animations %}
+    <p class="mb-4 text-sm">¿Te gustó esta página?</p>
+    <a href="{% url 'signup' %}"
+       class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2 rounded-lg transition">
+        <!-- Heroicon heart -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path fill-rule="evenodd"
+                  d="M12 4.248c-3.148-5.402-12-2.073-12 2.944 0 2.785 2.305 5.335 6.84 8.73l1.16.944 1.16-.944C19.695 12.527 22 9.977 22 7.192c0-5.017-8.852-8.346-12-2.944z"
+                  clip-rule="evenodd"/>
+        </svg>
+        Únete a feelinks.app
+    </a>
+</footer>
+
+
+{% if enable_animations %}
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             gsap.from(".animatable", {
@@ -22,6 +60,6 @@
             });
         });
     </script>
-    {% endif %}
+{% endif %}
 </body>
 </html>

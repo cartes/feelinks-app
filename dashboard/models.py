@@ -35,6 +35,8 @@ class Profile(models.Model):
     text_color = models.CharField(max_length=7, default="#000000")
     background_color = models.CharField(max_length=7, default="#FFFFFF")
     font_family = models.CharField(max_length=20, choices=FONT_CHOICES, default="sans")
+    show_invite_footer = models.BooleanField(default=True)
+    enable_animations = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

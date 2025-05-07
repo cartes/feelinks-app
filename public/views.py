@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import get_user_model, login
-from .forms import SignUpForm
+from .forms import SignUpForm, PasswordResetCustomForm
 
 User = get_user_model()
 
@@ -30,3 +30,19 @@ def signup(request):
         form = SignUpForm()
 
     return render(request, 'public/signup.html', {'form': form})
+
+
+def reset_password(request):
+    if request.method == 'POST':
+        form = PasswordResetCustomForm(request.POST)
+        if form.is_valid():
+            form.save(
+                request=request,
+                use_https=request.is_secure(),
+                email_template_name='public/password_reset_email.html',
+            )
+            return render(request, 'public/password_reset_done.html')
+    else:
+        form = PasswordResetCustomForm()
+
+    return render(request, 'public/password_reset.html', {'form': form})

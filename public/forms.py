@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm
 from django.contrib.auth.models import User
 
 
@@ -47,3 +48,12 @@ class CustomLoginForm(AuthenticationForm):
         'class': 'w-full rounded-lg border border-gray-300 px-4 py-2 text-sm',
         'placeholder': 'contraseña'
     }))
+
+
+class PasswordResetCustomForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs.update({
+            'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5',
+            'placeholder': 'tu@email.com',
+        })
