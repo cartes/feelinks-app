@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
+import ssl
+import certifi
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -128,3 +130,15 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'  # permite iframes desde el mismo dominio
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = '/login/'
+
+
+# Mail configuración
+ssl._create_default_https_context = ssl.create_default_context(cafile=certifi.where())
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'cristiancartesa@gmail.com'
+EMAIL_HOST_PASSWORD = 'qjov ddsf flmj bmqf'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

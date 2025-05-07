@@ -3,16 +3,14 @@ from django.contrib.auth import views as auth_views
 from . import views
 from public import views as public_views
 from .forms import CustomLoginForm
-from .views import reset_password
+from .views import reset_password, CustomLoginView
 
 urlpatterns = [
     path('', views.home, name='home'),
     path("@<str:username>", views.public_profile, name="public_profile"),
     path('signup/', public_views.signup, name='signup'),
-    path('login/', auth_views.LoginView.as_view(
-        template_name='public/login.html',
-        authentication_form=CustomLoginForm,
-    ), name='login'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
 
     path('password_reset/', reset_password, name='password_reset'),

@@ -1,6 +1,6 @@
 from django import forms
 from django.shortcuts import render
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 
 
@@ -42,7 +42,7 @@ class SignUpForm(UserCreationForm):
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'w-full rounded-lg border border-gray-300 px-4 py-2 text-sm',
-        'placeholder': 'nombredeusuario'
+        'placeholder': 'email@email.com'
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'w-full rounded-lg border border-gray-300 px-4 py-2 text-sm',
@@ -56,4 +56,16 @@ class PasswordResetCustomForm(PasswordResetForm):
         self.fields['email'].widget.attrs.update({
             'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5',
             'placeholder': 'tu@email.com',
+        })
+
+class SetPasswordCustomForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['new_password1'].widget.attrs.update({
+            'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5',
+            'placeholder': 'nueva contraseña',
+        })
+        self.fields['new_password2'].widget.attrs.update({
+            'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5',
+            'placeholder': 'confirma nueva contraseña',
         })

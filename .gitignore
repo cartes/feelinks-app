@@ -11,3 +11,4 @@ venv/
 .idea/
 .vscode/
 media/*
+feelinks/settings.py
