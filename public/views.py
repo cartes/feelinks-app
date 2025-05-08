@@ -11,7 +11,7 @@ class CustomLoginView(LoginView):
     authentication_form = CustomLoginForm
 
     def get_success_url(self):
-        return reverse('public_profile', kwargs={'username': self.request.user.username})
+        return reverse('dashboard_home')
 
 def public_profile(request, username):
     user = get_object_or_404(User, username=username)

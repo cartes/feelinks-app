@@ -7,37 +7,44 @@
     {% endif %}
 </head>
 <body {% if profile_user.profile.theme == 'custom' %}
-        style="background-color: {{ profile_user.profile.background_color }};
-                color: {{ profile_user.profile.text_color }};
-                font-family: {{ profile_user.profile.font_family }};"
-        {% else %}
-        class="{% if profile_user.profile.theme == 'dark' %}bg-gray-900 text-white
+    style="background-color: {{ profile_user.profile.background_color }};
+            color: {{ profile_user.profile.text_color }};
+            font-family: {{ profile_user.profile.font_family }};"
+{% else %}
+    class="{% if profile_user.profile.theme == 'dark' %}bg-gray-900 text-white
                {% elif profile_user.profile.theme == 'neon' %}bg-black text-green-400
                {% elif profile_user.profile.theme == 'light' %}bg-white text-gray-800
                {% endif %}"
-        style="font-family: {{ profile_user.profile.font_family }};"
-        {% endif %}
-        >
+    style="font-family: {{ profile_user.profile.font_family }};"
+{% endif %}
+>
 <main class="min-h-screen">
     {% block content %}{% endblock %}
 </main>
 <footer
         {% if profile_user.profile.theme == 'custom' %}
-        style="background-color: {{ profile_user.profile.background_color }};
-                color: {{ profile_user.profile.text_color }};
-                font-family: {{ profile_user.profile.font_family }};"
+            class="sticky py-6 px-4 text-center z-10 bottom-0"
+            style="background-color: {{ profile_user.profile.background_color }};
+                    color: {{ profile_user.profile.text_color }};
+                    font-family: {{ profile_user.profile.font_family }};"
         {% else %}
-        class="{% if profile_user.profile.theme == 'dark' %}bg-gray-900 text-white
+            class="{% if profile_user.profile.theme == 'dark' %}bg-gray-900 text-white
                {% elif profile_user.profile.theme == 'neon' %}bg-black text-green-400
                {% elif profile_user.profile.theme == 'light' %}bg-white text-gray-800
                {% endif %} sticky py-6 px-4 text-center z-10 bottom-0"
-        style="font-family: {{ profile_user.profile.font_family }};"
+            style="font-family: {{ profile_user.profile.font_family }};"
         {% endif %}
 >
 
     <p class="mb-4 text-sm">¿Te gustó esta página?</p>
     <a href="{% url 'signup' %}"
-       class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2 rounded-lg transition">
+       class="inline-flex items-center justify-center gap-2 text-white text-sm font-semibold px-6 py-2 rounded-lg transition
+           {% if profile_user.profile.theme == 'light' %}bg-blue-600 hover:bg-blue-700
+           {% elif profile_user.profile.theme == 'dark' %}bg-blue-500 hover:bg-blue-600
+           {% endif %}"
+            {% if profile_user.profile.theme == 'custom' %}
+       style="background-color: {{ profile_user.profile.primary_color }}; color: {{ profile_user.profile.text_color }}"
+            {% endif %}>
         <!-- Heroicon heart -->
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
             <path fill-rule="evenodd"

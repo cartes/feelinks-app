@@ -44,13 +44,23 @@
         <div class="w-full max-w-xs mt-6 space-y-3">
             {% for link in links %}
                 <a href="{{ link.url }}" target="_blank"
-                   class="block w-full px-4 py-3 text-sm font-semibold text-center rounded-lg hover:opacity-90 transition"
-                   style="background-color:
-                           {% if profile_user.profile.theme == 'custom' %}{{ profile_user.profile.primary_color }}{% else %}#2563EB{% endif %}; color: #fff;">
-                    {{ link.title }}
+                   class="block w-full px-4 py-3 text-sm font-semibold text-center rounded-lg hover:opacity-90 transition
+                {% if profile_user.profile.theme != 'custom' %}
+                    {% if profile_user.profile.theme == 'dark' %}
+                        bg-gray-900 text-white"
+                   {% elif profile_user.profile.theme == 'neon' %}
+                       bg-black text-green-400"
+                   {% elif profile_user.profile.theme == 'light' %}
+                       bg-white text-gray-800"
+                   {% endif %}
+               {% else %}
+                       "style="background-color: {{ profile_user.profile.primary_color }}"
+               {% endif %}
+                >
+                {{ link.title }}
                 </a>
             {% empty %}
-                <p class="text-gray-400 text-center">Este usuario aún no ha agregado enlaces.</p>
+                <p class=" text-gray-400 text-center">Este usuario aún no ha agregado enlaces.</p>
             {% endfor %}
         </div>
 
