@@ -1,0 +1,90 @@
+<!-- components/modals/avatar_modal.html -->
+
+<!-- Avatar Modal -->
+<div id="avatarModal" tabindex="-1" aria-hidden="true"
+     class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full bg-black bg-opacity-50">
+    <div class="relative w-full max-w-md max-h-full mx-auto mt-20">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-800 p-6">
+            <button type="button"
+                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    data-modal-hide="avatarModal">
+                ✕
+            </button>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Subir nueva imagen de avatar</h3>
+
+            <form id="avatarUploadForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="avatarUpload"
+                       class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M7 16v-4a4 4 0 014-4h0a4 4 0 014 4v4m0 0l4-4m-4 4l-4-4"/>
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Haz clic para subir</span> o
+                            arrastra una imagen</p>
+                        <p class="text-xs text-gray-500">JPG, PNG o WebP (máx. 2MB)</p>
+                    </div>
+                    <input id="avatarUpload" type="file" name="avatar" class="hidden" accept="image/*">
+                </label>
+
+                <button type="submit"
+                        class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
+                    Guardar avatar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Script que guarda el avatar -->
+<script>
+    document.getElementById("avatarUploadForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const input = document.getElementById("avatarUpload");
+            const file = input.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("avatar", file);
+
+            const response = await fetch("{% url 'upload_avatar' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                const avatarImg = document.getElementById("avatarImage");
+                const previewAvatar = document.getElementById("previewAvatar");
+
+                avatarImg.src = data.avatar_url;
+                previewAvatar.src = data.avatar_url;
+
+                avatarImg.classList.add("ring", "ring-green-400");
+
+                const modal = document.getElementById("avatarModal");
+                const mainContent = document.querySelector("main");
+
+                if (modal) {
+                    modal.classList.add("hidden");
+                    modal.setAttribute("aria-hidden", "true");
+
+                    const backdrop = document.querySelector('[modal-backdrop]');
+                    if (backdrop) backdrop.remove();
+
+                    document.body.classList.remove('overflow-hidden');
+                    mainContent?.removeAttribute("inert");
+                }
+            } else {
+                alert(data.error || "Ocurrió un error al subir el avatar.");
+            }
+        }
+    )
+    ;
+</script>

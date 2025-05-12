@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+
 from .models import UserLink
 from .forms import UserLinkForm, ProfileForm
 
@@ -76,3 +79,16 @@ def preview_profile(request):
 @login_required
 def dashboard_home(request):
     return render(request, "profiles/dashboard_home.html")
+
+@login_required
+@require_POST
+def upload_avatar(request):
+    avatar = request.FILES.get("avatar")
+
+    if avatar:
+        profile = request.user.profile
+        profile.avatar = avatar
+        profile.save()
+        return JsonResponse({"success": True, "avatar_url": profile.avatar.url})
+    else:
+        return JsonResponse({"success": False, "error": "No se envió ninguna imagen."}, status=400)

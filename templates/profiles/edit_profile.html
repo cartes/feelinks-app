@@ -1,6 +1,12 @@
 {% extends "base_dashboard.html" %}
 {% block title %}Editar perfil | feelinks.app{% endblock %}
+{% block header %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock %}
+
 {% block content %}
+{% include "components/modals/modal_avatar.html" %}
+
     <div class="flex-1 flex-row flex">
         <div class="flex-col space-y-4 p-6 w-2/3">
             <h1 class="text-2xl font-bold mb-6">Editar perfil</h1>
@@ -10,11 +16,14 @@
 
                 <div>
                     <label class="block mb-1 text-sm font-medium">Avatar (URL)</label>
-                    {{ form.avatar }}
                     {% if profile.avatar %}
-                        <div class="mt-2">
-                            <img src="{{ profile.avatar.url }}" class="w-24 h-24 rounded-full border mt-2"/>
-                        </div>
+                        <img src="{{ profile.avatar.url }}"
+                             alt="Avatar"
+                             id="avatarImage"
+                             class="w-24 h-24 mx-auto rounded-full border object-cover cursor-pointer hover:opacity-80 transition"
+                             data-modal-target="avatarModal"
+                             data-modal-toggle="avatarModal">
+
                     {% endif %}
                 </div>
 
@@ -78,8 +87,8 @@
                          style="background-color: {{ request.user.profile.background_color }}; color: {{ request.user.profile.text_color }};">
                         <img id="previewAvatar"
                              src="{{ request.user.profile.avatar.url }}"
-                             class="w-20 h-20 mx-auto rounded-full mb-3 border"/>
-                        <h3 class="text-center text-lg font-bold">
+                             class="w-20 h-20 mx-auto rounded-full mb-3 border object-cover"/>
+                        <h3 class="text-center text-sm font-bold">
                             {{ request.user.profile.display_name|default:request.user.username }}
                         </h3>
                         <p class="text-center text-sm mt-1">
@@ -88,19 +97,22 @@
 
                         <a href="#"
                            id="previewButton"
-                           {% if request.user.profile.theme != 'custom' %} class="inline-block mt-6 px-4 py-2 mx-auto rounded text-white text-center text-sm {% else %}
-                           class="inline-block mt-6 px-4 py-2 mx-auto rounded text-white text-center text-sm" {% endif %}
                                 {% if request.user.profile.theme != 'custom' %}
-                                    {% if request.user.profile.theme == 'dark' %}
-                                       bg-gray-900 text-white"
-                                    {% elif request.user.profile.theme == 'neon' %}
-                                        bg-black text-green-400"
-                                    {% elif request.user.profile.theme == 'light' %}
-                                        bg-white text-gray-800"
-                                    {% endif %}
-                                {% else %}
-                                    style="color: inherit; background-color: {{ request.user.profile.primary_color }}; color: {{ request.user.profile.text_color }};"
-                                {% endif %}
+                           class="inline-block mt-6 px-4 py-2 mx-auto rounded text-center text-xs {% else %}
+                           class="inline-block mt-6 px-4 py-2 mx-auto rounded text-white text-center text-sm
+                                    " {% endif %}
+                        {% if request.user.profile.theme != 'custom' %}
+                            {% if request.user.profile.theme == 'dark' %}
+                                bg-gray-900 text-white"
+                            {% elif request.user.profile.theme == 'neon' %}
+                                bg-black text-green-400"
+                            {% elif request.user.profile.theme == 'light' %}
+                                bg-white text-gray-800"
+                            {% endif %}
+                        {% else %}
+                            style="color: inherit; background-color: {{ request.user.profile.primary_color }}; color:
+                            {{ request.user.profile.text_color }};"
+                        {% endif %}
                         >
                         Enlace de ejemplo
                         </a>

@@ -1,8 +1,16 @@
+import os
 from django.db import models
 from django.conf import settings
 from themes.models import Theme
 from django.core.validators import FileExtensionValidator
+from datetime import datetime
 
+def upload_avatar_to(instance, filename):
+    user_id = instance.user.id
+    fecha = datetime.now().strftime("%Y%m%d")
+    extension = os.path.splitext(filename)[1]
+
+    return f"avatars/id-{user_id}-{fecha}/{filename}{extension}"
 
 class Profile(models.Model):
     FONT_CHOICES = [
@@ -19,7 +27,7 @@ class Profile(models.Model):
     slug = models.SlugField(unique=True, help_text="URL única para el dashboard, ej: 'mi-dashboard'")
     bio = models.TextField(blank=True, null=True)
     avatar = models.ImageField(
-        upload_to="avatars/",
+        upload_to=upload_avatar_to,
         validators=[FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"])],
         blank=True,
         null=True
