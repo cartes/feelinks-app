@@ -20,7 +20,7 @@ class ProfileForm(forms.ModelForm):
         required=False,
         label="Tema predefinido",
         empty_label="Personalizado",
-        widget=forms.Select(attrs={"class": "form-select w-full"})
+        widget=forms.Select(attrs={"class": "w-full rounded-lg border border-gray-300 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"})
     )
 
     class Meta:
