@@ -1,23 +1,15 @@
 {% extends "base_public.html" %}
 
 {% block title %}{{ profile_user.username }} • feelinks.app{% endblock %}
+
 {% block content %}
     <div
-            class="min-h-screen flex flex-col items-center justify-start py-8 px-4
-    {% if profile_user.profile.theme == 'dark' %}
-        bg-gray-900 text-white
-    {% elif profile_user.profile.theme == 'neon' %}
-        bg-black text-green-400
-    {% elif profile_user.profile.theme == 'light' %}
-        bg-white text-gray-800
-    {% endif %}"
-            {% if profile_user.profile.theme == 'custom' %}
-            style="background-color: {{ profile_user.profile.background_color }};
+            class="min-h-screen flex flex-col items-center justify-start py-8 px-4"
+            style="
+                    background-color: {{ profile_user.profile.background_color }};
                     color: {{ profile_user.profile.text_color }};
-                    font-family: {{ profile_user.profile.font_family }};"
-            {% else %}
-            style="font-family: {{ profile_user.profile.font_family }};"
-            {% endif %}
+                    font-family: {{ profile_user.profile.font_family }};
+                    "
     >
         <!-- Avatar -->
         {% if profile_user.profile.avatar %}
@@ -25,7 +17,9 @@
                  class="w-24 h-24 sm:w-28 sm:h-28 rounded-full shadow mb-4 border-2 border-white object-cover"/>
         {% else %}
             <div class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
-                <span class="text-xl font-bold">{{ profile_user.username|slice:":1"|upper }}</span>
+            <span class="text-xl font-bold">
+                {{ profile_user.username|slice:":1"|upper }}
+            </span>
             </div>
         {% endif %}
 
@@ -44,25 +38,18 @@
         <div class="w-full max-w-xs mt-6 space-y-3">
             {% for link in links %}
                 <a href="{{ link.url }}" target="_blank"
-                   class="block w-full px-4 py-3 text-sm font-semibold text-center rounded-lg hover:opacity-90 transition
-                {% if profile_user.profile.theme != 'custom' %}
-                    {% if profile_user.profile.theme == 'dark' %}
-                        bg-gray-900 text-white"
-                   {% elif profile_user.profile.theme == 'neon' %}
-                       bg-black text-green-400"
-                   {% elif profile_user.profile.theme == 'light' %}
-                       bg-white text-gray-800"
-                   {% endif %}
-               {% else %}
-                       "style="background-color: {{ profile_user.profile.primary_color }}"
-               {% endif %}
+                   class="block w-full px-4 py-3 text-sm font-semibold text-center rounded-lg hover:opacity-90 transition"
+                   style="
+                           background-color: {{ profile_user.profile.primary_color }};
+                           color: {{ profile_user.profile.text_color }};
+                           font-family: {{ profile_user.profile.font_family }};
+                           "
                 >
-                {{ link.title }}
+                    {{ link.title }}
                 </a>
             {% empty %}
-                <p class=" text-gray-400 text-center">Este usuario aún no ha agregado enlaces.</p>
+                <p class="text-gray-400 text-center">Este usuario aún no ha agregado enlaces.</p>
             {% endfor %}
         </div>
-
     </div>
 {% endblock %}

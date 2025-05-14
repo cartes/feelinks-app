@@ -5,12 +5,14 @@ from themes.models import Theme
 from django.core.validators import FileExtensionValidator
 from datetime import datetime
 
+
 def upload_avatar_to(instance, filename):
     user_id = instance.user.id
     fecha = datetime.now().strftime("%Y%m%d")
     extension = os.path.splitext(filename)[1]
 
     return f"avatars/id-{user_id}-{fecha}/{filename}{extension}"
+
 
 class Profile(models.Model):
     FONT_CHOICES = [
@@ -32,12 +34,20 @@ class Profile(models.Model):
         blank=True,
         null=True
     )
+
     theme = models.CharField(max_length=20, choices=[
         ("light", "Claro"),
         ("dark", "Oscuro"),
         ("neon", "Neón"),
         ("custom", "Personalizado")  # 👈 nuevo tipo
     ], default="light")
+
+    background_image = models.ImageField(
+        upload_to="profile_backgrounds/",
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(["jpg", "jpeg", "png", "webp"])]
+    )
 
     primary_color = models.CharField(max_length=7, default="#2563EB")
     text_color = models.CharField(max_length=7, default="#000000")
@@ -53,3 +63,30 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return f"/{self.slug}/"
+
+
+class Theme(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    background_color = models.CharField(max_length=7, default="#ffffff")
+    text_color = models.CharField(max_length=7, default="#000000")
+    primary_color = models.CharField(max_length=7, default="#2563eb")
+
+    FONT_CHOICES = [
+        ("sans", "Sans (por defecto)"),
+        ("serif", "Serif"),
+        ("mono", "Monoespaciada"),
+        ("inter", "Inter"),
+        ("poppins", "Poppins"),
+        ("raleway", "Raleway"),
+    ]
+
+    font_family = models.CharField(max_length=50, choices=FONT_CHOICES, default="sans")
+    background_image = models.ImageField(
+        upload_to="theme_backgrounds/",
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(["jpg", "jpeg", "png", "webp"])]
+    )
+
+    def __str__(self):
+        return self.name

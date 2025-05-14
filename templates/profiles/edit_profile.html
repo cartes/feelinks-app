@@ -1,11 +1,11 @@
 {% extends "base_dashboard.html" %}
 {% block title %}Editar perfil | feelinks.app{% endblock %}
 {% block header %}
-<meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
 {% endblock %}
 
 {% block content %}
-{% include "components/modals/modal_avatar.html" %}
+    {% include "components/modals/modal_avatar.html" %}
 
     <div class="flex-1 flex-row flex">
         <div class="flex-col space-y-4 p-6 w-2/3">
@@ -14,32 +14,36 @@
             <form method="POST" class="grid gap-6 max-w-2xl" id="profile-form" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                <div>
-                    <label class="block mb-1 text-sm font-medium">Avatar (URL)</label>
-                    {% if profile.avatar %}
-                        <img src="{{ profile.avatar.url }}"
-                             alt="Avatar"
-                             id="avatarImage"
-                             class="w-24 h-24 mx-auto rounded-full border object-cover cursor-pointer hover:opacity-80 transition"
-                             data-modal-target="avatarModal"
-                             data-modal-toggle="avatarModal">
+                <div class="flex flex-col md:flex-row gap-6 mb-6">
+                    <!-- Columna izquierda: Avatar -->
+                    <div class="flex-shrink-0 flex items-center justify-center md:justify-center md:w-1/4">
+                        {% if profile.avatar %}
+                            <img src="{{ profile.avatar.url }}"
+                                 alt="Avatar"
+                                 id="avatarImage"
+                                 class="w-24 h-24 rounded-full border object-cover cursor-pointer hover:opacity-80 transition"
+                                 data-modal-target="avatarModal"
+                                 data-modal-toggle="avatarModal">
+                        {% endif %}
+                    </div>
 
-                    {% endif %}
+                    <!-- Columna derecha: Nombre y Biografía -->
+                    <div class="flex-grow space-y-4">
+                        <div>
+                            <label class="block mb-1 text-sm font-medium">Nombre para mostrar</label>
+                            {{ form.display_name }}
+                        </div>
+                        <div>
+                            <label class="block mb-1 text-sm font-medium">Biografía</label>
+                            {{ form.bio }}
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block mb-1 text-sm font-medium">Nombre para mostrar</label>
-                    {{ form.display_name }}
-                </div>
 
                 <div>
-                    <label class="block mb-1 text-sm font-medium">Biografía</label>
-                    {{ form.bio }}
-                </div>
-
-                <div>
-                    <label class="block mb-1 text-sm font-medium">Tema</label>
-                    {{ form.theme }}
+                    <label class="block mb-1 text-sm font-medium">Tema predefinido</label>
+                    {{ form.theme_choice }}
                 </div>
 
                 <div>
@@ -63,6 +67,12 @@
                     </div>
                 </div>
 
+                <div>
+                    <label class="block mb-1 text-sm font-medium">Imagen de fondo personalizada</label>
+                    {{ form.background_image }}
+                </div>
+
+
                 <div class="flex items-center mt-4">
                     <input type="checkbox" name="show_invite_footer" id="show_invite_footer"
                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
@@ -82,67 +92,56 @@
             <div class="mt-10 pt-6">
                 <h2 class="text-lg font-semibold mb-2">Vista previa</h2>
                 <div class="flex justify-center">
-                    <div class="w-[280px] h-[580px] rounded-[2.5rem] border-4 border-gray-300 bg-white shadow-lg overflow-hidden flex flex-col justify-start p-4"
-                         id="previewBox"
-                         style="background-color: {{ request.user.profile.background_color }}; color: {{ request.user.profile.text_color }};">
+                    <div
+                            class="w-[280px] h-[580px] rounded-[2.5rem] border-4 border-gray-300 shadow-lg overflow-hidden flex flex-col justify-start p-4 transition-all"
+                            style="
+                                    background-color: {{ profile.background_color }};
+                                    color: {{ profile.text_color }};
+                                    font-family: {{ profile.font_family }};
+                                    "
+                            id="previewBox"
+                    >
                         <img id="previewAvatar"
-                             src="{{ request.user.profile.avatar.url }}"
+                             src="{{ profile.avatar.url }}"
                              class="w-20 h-20 mx-auto rounded-full mb-3 border object-cover"/>
+
                         <h3 class="text-center text-sm font-bold">
-                            {{ request.user.profile.display_name|default:request.user.username }}
+                            {{ profile.display_name|default:request.user.username }}
                         </h3>
+
                         <p class="text-center text-sm mt-1">
-                            {{ request.user.profile.bio }}
+                            {{ profile.bio }}
                         </p>
 
                         <a href="#"
                            id="previewButton"
-                                {% if request.user.profile.theme != 'custom' %}
-                           class="inline-block mt-6 px-4 py-2 mx-auto rounded text-center text-xs {% else %}
-                           class="inline-block mt-6 px-4 py-2 mx-auto rounded text-white text-center text-sm
-                                    " {% endif %}
-                        {% if request.user.profile.theme != 'custom' %}
-                            {% if request.user.profile.theme == 'dark' %}
-                                bg-gray-900 text-white"
-                            {% elif request.user.profile.theme == 'neon' %}
-                                bg-black text-green-400"
-                            {% elif request.user.profile.theme == 'light' %}
-                                bg-white text-gray-800"
-                            {% endif %}
-                        {% else %}
-                            style="color: inherit; background-color: {{ request.user.profile.primary_color }}; color:
-                            {{ request.user.profile.text_color }};"
-                        {% endif %}
+                           class="inline-block mt-6 px-4 py-2 mx-auto rounded text-center text-sm font-semibold shadow transition hover:opacity-90"
+                           style="
+                                   background-color: {{ profile.primary_color }};
+                                   color: {{ profile.text_color }};
+                                   font-family: {{ profile.font_family }};
+                                   "
                         >
-                        Enlace de ejemplo
+                            Enlace de ejemplo
                         </a>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
     <script>
-        const themes = {
-            claro: {
-                background: "#ffffff",
-                text: "#000000",
-                primary: "#2563eb"
-            },
-            oscuro: {
-                background: "#1f2937",
-                text: "#f9fafb",
-                primary: "#3b82f6"
-            },
-            neon: {
-                background: "#0f0f0f",
-                text: "#39ff14",
-                primary: "#ff00ff"
-            }
-        };
+        const themes = {};
+        const themesList = JSON.parse('{{ themes_json|escapejs }}');
+        themesList.forEach(theme => {
+            themes[theme.id] = {
+                background: theme.background_color,
+                text: theme.text_color,
+                primary: theme.primary_color
+            };
+        });
 
-        const themeSelect = document.getElementById("id_theme");
+        const themeSelect = document.getElementById("id_theme_choice");
         const backgroundInput = document.getElementById("id_background_color");
         const textInput = document.getElementById("id_text_color");
         const primaryInput = document.getElementById("id_primary_color");
@@ -156,28 +155,29 @@
             previewBox.style.backgroundColor = bg;
             previewBox.style.color = text;
             previewButton.style.backgroundColor = primary;
+            previewButton.style.color = text;
         }
 
         function updatePreview() {
-            const selectedTheme = themeSelect.value;
+            const selectedTheme = parseInt(themeSelect.value);
 
             if (themes[selectedTheme]) {
                 const {background, text, primary} = themes[selectedTheme];
 
-                // aplicar tema predefinido
                 backgroundInput.value = background;
                 textInput.value = text;
                 primaryInput.value = primary;
-                backgroundInput.disabled = true;
-                textInput.disabled = true;
-                primaryInput.disabled = true;
+
+                backgroundInput.readOnly = true;
+                textInput.readOnly = true;
+                primaryInput.readOnly = true;
 
                 applyPreviewStyles(background, text, primary);
             } else {
-                // tema personalizado
-                backgroundInput.disabled = false;
-                textInput.disabled = false;
-                primaryInput.disabled = false;
+                // Tema personalizado (o ninguno seleccionado)
+                backgroundInput.readOnly = false;
+                textInput.readOnly = false;
+                primaryInput.readOnly = false;
 
                 applyPreviewStyles(
                     backgroundInput.value,
@@ -186,7 +186,7 @@
                 );
             }
 
-            updateFontPreview(); // mantiene la fuente actualizada
+            updateFontPreview();
         }
 
         function updateFontPreview() {

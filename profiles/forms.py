@@ -1,6 +1,6 @@
 from django import forms
 from .models import UserLink
-from dashboard.models import Profile
+from dashboard.models import Profile, Theme
 
 
 class UserLinkForm(forms.ModelForm):
@@ -15,12 +15,20 @@ class UserLinkForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    theme_choice = forms.ModelChoiceField(
+        queryset=Theme.objects.all(),
+        required=False,
+        label="Tema predefinido",
+        empty_label="Personalizado",
+        widget=forms.Select(attrs={"class": "form-select w-full"})
+    )
+
     class Meta:
         model = Profile
         fields = [
-            "display_name", "bio", "avatar", "theme",
+            "display_name", "bio", "avatar", "theme_choice",
             "background_color", "text_color", "primary_color",
-            "font_family"
+            "font_family", "background_image", "show_invite_footer",
         ]
 
         widgets = {
@@ -36,7 +44,7 @@ class ProfileForm(forms.ModelForm):
             "avatar": forms.ClearableFileInput(attrs={
                 "class": "w-full block text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             }),
-            "theme": forms.Select(attrs={
+            "theme_choice": forms.Select(attrs={
                 "class": "w-full rounded-lg border border-gray-300 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             }),
             "font_family": forms.Select(attrs={
@@ -55,6 +63,9 @@ class ProfileForm(forms.ModelForm):
                 "type": "color",
                 "class": "w-full h-10 rounded-md border border-gray-300 cursor-pointer"
             }),
+            "background_image": forms.ClearableFileInput(attrs={
+                "class": "form-input w-full"
+            }),
         }
 
         def clean(self):
@@ -72,3 +83,20 @@ class ProfileForm(forms.ModelForm):
                 cleaned_data["primary_color"] = "#3b82f6"
 
             return cleaned_data
+
+        def save(self, commit=True):
+            profile = super().save(commit=False)
+            theme = self.cleaned_data.get("theme_choice")
+
+            if theme:
+                profile.background_color = theme.background_color
+                profile.text_color = theme.text_color
+                profile.primary_color = theme.primary_color
+                profile.font_family = theme.font_family
+
+                if theme.background_image:
+                    profile.background_image = theme.background_image
+
+            if commit:
+                profile.save()
+            return profile

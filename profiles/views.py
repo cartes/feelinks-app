@@ -4,8 +4,11 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 
 from .models import UserLink
+from dashboard.models import Theme
 from .forms import UserLinkForm, ProfileForm
 
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 
 @login_required
 def manage_links(request):
@@ -60,14 +63,22 @@ def edit_profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect("edit_profile")
+            return redirect("edit_profile")  # pon el nombre correcto de tu URL aquí
     else:
         form = ProfileForm(instance=profile)
 
-    return render(request, "profiles/edit_profile.html", {
+    themes = list(Theme.objects.all().values(
+        'id', 'name', 'background_color', 'text_color', 'primary_color'
+    ))
+
+    context = {
         "form": form,
         "profile": profile,
-    })
+        "themes_json": json.dumps(themes, cls=DjangoJSONEncoder),
+    }
+
+    return render(request, "profiles/edit_profile.html", context)
+
 
 @login_required
 def preview_profile(request):
@@ -79,6 +90,7 @@ def preview_profile(request):
 @login_required
 def dashboard_home(request):
     return render(request, "profiles/dashboard_home.html")
+
 
 @login_required
 @require_POST
