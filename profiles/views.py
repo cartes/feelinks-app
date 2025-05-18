@@ -104,3 +104,17 @@ def upload_avatar(request):
         return JsonResponse({"success": True, "avatar_url": profile.avatar.url})
     else:
         return JsonResponse({"success": False, "error": "No se envió ninguna imagen."}, status=400)
+
+@login_required
+@require_POST
+def reorder_links(request):
+    try:
+        data = json.loads(request.body)
+        ordered_ids = data.get('ordered_ids', [])
+
+        for index, link_id in enumerate(ordered_ids):
+            UserLink.objects.filter(id=link_id, user=request.user).update(order=index)
+
+        return JsonResponse({'status': 'ok'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)

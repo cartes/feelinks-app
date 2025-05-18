@@ -1,0 +1,34 @@
+{% load static %}
+
+<div id="addFormPanel" class="hidden mb-10 p-6 bg-white border border-gray-200 rounded-2xl shadow-md">
+    <h2 class="text-xl font-bold mb-4 text-gray-900">Enter URL or Browse Apps</h2>
+
+    <!-- Sugerencias visuales -->
+    <div class="mb-6">
+        <p class="text-sm text-gray-500 mb-2">Inspired by your interests</p>
+        <div class="flex flex-1 gap-4 justify-start">
+            <div class="max-w-[90px] max-h-[90px] hover:bg-gray-200 flex flex-1 border border-gray-200 rounded-lg p-4 items-center justify-center">
+                <button type="button" data-url="https://www.instagram.com/" data-title="Instagram"
+                        class="flex flex-col items-center text-sm text-gray-700 hover:text-purple-600">
+                    <img src="{% static 'icons/instagram-svgrepo-com.svg' %}" class="w-10 h-10"
+                         alt="Instagram"/>
+                    <span>Instagram</span>
+                </button>
+            </div>
+            <div class="max-w-[90px] max-h-[90px] hover:bg-gray-200 flex flex-1 border border-gray-200 rounded-lg p-4 items-center justify-center">
+                <button type="button" data-url="https://www.tiktok.com/" data-title="TikTok"
+                        class="flex flex-col items-center text-sm text-gray-700 hover:text-purple-600">
+                    <img src="{% static 'icons/tiktok-svgrepo-com.svg' %}" class="w-10 h-10" alt="TikTok"/>
+                    <span>TikTok</span>
+                </button>
+            </div>
+            <div class="max-w-[90px] max-h-[90px] hover:bg-gray-200 flex flex-1 border border-gray-200 rounded-lg p-4 items-center justify-center">
+                <button type="button" data-url="https://www.tiktok.com/" data-title="TikTok"
+                        class="flex flex-col items-center text-sm text-gray-700 hover:text-purple-600">
+                    <img src="{% static 'icons/youtube-color-svgrepo-com.svg' %}" class="w-10 h-10" alt="TikTok"/>
+                    <span>Youtube</span>
+                </button>
+            </div>
+            <!-- Agrega más apps si quieres -->
+        </div>
+    </div>

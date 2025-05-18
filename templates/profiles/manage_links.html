@@ -1,11 +1,13 @@
 {% extends "base_dashboard.html" %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block content %}
-    <div class="max-w-7xl mt-10 px-4 w-1/2">
+    <div class="max-w-7xl w-2/3 mt-10 px-4 items-start">
         <div class="flex items-start justify-between mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Mis enlaces</h1>
         </div>
+
         <div class="flex items-center justify-between mb-6">
             <button id="toggleFormBtn"
                     class="text-white md:w-full bg-purple-600 hover:bg-purple-700 font-medium rounded-xl text-sm px-5 py-2.5 shadow-md">
@@ -13,39 +15,52 @@
             </button>
         </div>
 
-        <!-- Panel oculto -->
-        <div id="addFormPanel" class="hidden mb-10 p-6 bg-white border border-gray-200 rounded-lg shadow-md">
-            <h2 class="text-xl font-semibold mb-4">Nuevo enlace</h2>
-            <form method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {% csrf_token %}
-                <div>
-                    <label for="id_title" class="block text-sm font-medium text-gray-700">Título</label>
-                    {{ form.title|add_class:"input input-bordered w-full" }}
-                </div>
-                <div>
-                    <label for="id_url" class="block text-sm font-medium text-gray-700">URL</label>
-                    {{ form.url|add_class:"input input-bordered w-full" }}
-                </div>
-                <div>
-                    <label for="id_order" class="block text-sm font-medium text-gray-700">Orden</label>
-                    {{ form.order|add_class:"input input-bordered w-full" }}
-                </div>
-                <div class="col-span-1 md:col-span-3">
-                    <button type="submit" class="btn btn-primary w-full mt-4">Guardar enlace</button>
-                </div>
-            </form>
-        </div>
+        <!-- Modulo Creación de los links -->
+        {% include 'components/mod_create_link.html' %}
+        <!-- ### -->
 
-        <!-- Lista de enlaces -->
-        <div id="linksContainer" class="space-y-4">
-            {% for link in links %}
-                <div data-id="{{ link.id }}"
-                     class="draggable-link cursor-move flex justify-between items-center p-4 bg-white rounded-lg shadow border border-gray-200">
+        <!-- Formulario tradicional -->
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="id_title" class="block text-sm font-medium text-gray-700">Título</label>
+                {{ form.title|add_class:"input input-bordered w-full" }}
+            </div>
+            <div>
+                <label for="id_url" class="block text-sm font-medium text-gray-700">URL</label>
+                {{ form.url|add_class:"input input-bordered w-full" }}
+            </div>
+            <div class="hidden">
+                {{ form.order }}
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary w-full mt-2">Guardar enlace</button>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Lista de enlaces -->
+    <div id="linksContainer" class="space-y-4">
+        {% for link in links %}
+            <div data-id="{{ link.id }}"
+                 class="draggable-link flex justify-between items-center p-4 bg-white rounded-lg shadow border border-gray-200">
+                <div class="drag-handle cursor-move  pr-2 text-gray-400">
+                    <!-- SVG grip -->
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <circle cx="5" cy="5" r="1.5"/>
+                        <circle cx="5" cy="10" r="1.5"/>
+                        <circle cx="5" cy="15" r="1.5"/>
+                        <circle cx="10" cy="5" r="1.5"/>
+                        <circle cx="10" cy="10" r="1.5"/>
+                        <circle cx="10" cy="15" r="1.5"/>
+                    </svg>
+                </div>
+                <div class="flex-1 flex justify-between items-center gap-4">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800">{{ link.title }}</h3>
                         <a href="{{ link.url }}"
                            class="text-blue-600 hover:underline break-words text-sm">{{ link.url }}</a>
-                        <p class="text-sm text-gray-500">Orden: {{ link.order }}</p>
                     </div>
                     <div class="flex items-center gap-4">
                         <a href="{% url 'edit_link' link.id %}" class="text-gray-600 hover:text-blue-600"
@@ -65,31 +80,48 @@
                         </div>
                     </div>
                 </div>
-            {% empty %}
-                <p class="text-gray-500">No tienes enlaces aún.</p>
-            {% endfor %}
-        </div>
+            </div>
+        {% empty %}
+            <p class="text-gray-500">No tienes enlaces aún.</p>
+        {% endfor %}
+    </div>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
-        // Mostrar/ocultar panel
         const toggleBtn = document.getElementById('toggleFormBtn');
         const formPanel = document.getElementById('addFormPanel');
         toggleBtn.addEventListener('click', () => formPanel.classList.toggle('hidden'));
 
-        // Activar drag and drop
         const el = document.getElementById('linksContainer');
+
         Sortable.create(el, {
             animation: 150,
-            handle: ".draggable-link",
-            onEnd: function (/**Event*/evt) {
+            handle: ".drag-handle",
+            onEnd: function () {
                 const ids = [...el.children].map(child => child.dataset.id);
-                console.log("Nuevo orden:", ids);
-                // Aquí podrías hacer un fetch/ajax para enviar el nuevo orden a Django
+
+                // Actualiza visualmente el texto "Orden: X"
+                ids.forEach((id, index) => {
+                    const element = el.querySelector(`[data-id='${id}']`);
+                    const orderText = element.querySelector("p.text-sm.text-gray-500");
+                    if (orderText) {
+                        orderText.textContent = `Orden: ${index}`;
+                    }
+                });
+
+                // Guardar en el backend
+                fetch("{% url 'reorder_links' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}",
+                    },
+                    body: JSON.stringify({ordered_ids: ids}),
+                }).then(res => res.json())
+                    .then(data => console.log("Orden actualizado", data));
             },
         });
     </script>
-
 {% endblock %}
